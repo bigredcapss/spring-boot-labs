@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--引用默认日志配置-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!--使用默认的控制台日志输出实现-->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!--日志文件名称前缀-->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="springBoot"/>
+    <!--日志文件保存路径-->
+    <property name="LOG_FILE_PATH" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/}"/>
+
+    <!--控制台输出日志格式-->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss} -- %-5level -- [%thread] -- %logger{50} --- %msg %n}"/>
+    <!--文件输出日志格式-->
+    <property name="FILE_LOG_PATTERN"
+              value="${FILE_LOG_PATTERN:-%d{yyyy-MM-dd hh:mm:ss} -- %-5level -- [%thread] -- %logger{50} --- %msg %n}"/>
+
+    <!--
+        Appender: 设置日志信息的去向,常用的有以下几个
+           1) ch.qos.logback.core.ConsoleAppender (控制台)
+           2) ch.qos.logback.core.rolling.RollingFileAppender (文件大小到达指定尺寸的时候产生一个新文件)
+           3) ch.qos.logback.core.FileAppender (文件)
+    -->
+
+    <!--INFO日志输出到控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!--日志输出格式-->
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--DEBUG日志输出到文件-->
+    <appender name="FILE_DEBUG"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--输出DEBUG以上级别日志-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <!--设置为默认的文件日志格式-->
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--设置文件命名格式-->
+            <fileNamePattern>${LOG_FILE_PATH}/debug/${APP_NAME}-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <!--设置日志文件大小，超过就重新生成文件，默认10M-->
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <!--日志文件保留天数，默认30天-->
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-30}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--ERROR日志输出到文件-->
+    <appender name="FILE_ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--只输出ERROR级别的日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <!--设置为默认的文件日志格式-->
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--设置文件命名格式-->
+            <fileNamePattern>${LOG_FILE_PATH}/error/${APP_NAME}-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <!--设置日志文件大小，超过就重新生成文件，默认10M-->
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <!--日志文件保留天数，默认30天-->
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-30}</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
+
+    <!--
+        root节点是必选节点，用来指定最基础的日志输出级别，只有一个level属性。
+        <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger，使该指定的appender生效。
+    -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE_DEBUG"/>
+        <appender-ref ref="FILE_ERROR"/>
+    </root>
+
+    <!--
+        用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>。
+        <logger>仅有一个name属性，一个可选的level和一个可选的addtivity属性
+        name:
+            用来指定受此logger约束的某一个包或者具体的某一个类。
+        level:
+            用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，
+            如果未设置此属性，那么当前logger将会继承上级的级别。
+        additivity:
+            是否向上级logger传递打印信息。默认是true。
+        <logger>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger
+    -->
+    <!--设置某一个类的日志打印级别-->
+    <logger name="com.we.controller.UserController" level="info"/>
+    <!--控制框架输出日志-->
+    <logger name="org.slf4j" level="INFO"/>
+    <logger name="springfox" level="INFO"/>
+    <logger name="io.swagger" level="INFO"/>
+    <logger name="org.projectlombok" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/>
+
+</configuration>
