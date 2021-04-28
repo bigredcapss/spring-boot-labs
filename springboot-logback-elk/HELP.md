@@ -34,7 +34,7 @@ Elasticsearch6.3.2启动失败解决办法：
 ---
 ### 说明3: logstash
 #### 1.在../config文件夹下新建logstash.conf文件，内容如下：
-(```)
+``` 
     input{
     	# 建立两个不同的输入，将两个输入的日志分别输入到不同的索引中
     	tcp {
@@ -131,7 +131,7 @@ Elasticsearch6.3.2启动失败解决办法：
     	}
     	stdout{codec => rubydebug}
     }
-(```)
+```
 
 
 #### 启动服务
