@@ -30,12 +30,18 @@ public class RedisInterceptor implements HandlerInterceptor {
 
     @Autowired
     private CommonService commonService;
-
     @Autowired
     private RedisService redisService;
 
 
-    //获取前端塞在请求头header里面的accessToken字段的值，然后进行验证与解析
+    /**
+     * 获取前端塞在请求头header里面的accessToken字段的值，然后进行验证与解析
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod){

@@ -17,14 +17,22 @@ import java.util.Date;
  **/
 public class JwtRedisUtil {
 
-    //生成密钥
+    /**
+     * 生成密钥
+     * @return
+     */
     public static SecretKey generalKey(){
         byte[] encodedKey= Base64.decode(Constant.JWT_SECRET);
         SecretKey key=new SecretKeySpec(encodedKey,0,encodedKey.length,"AES");
         return key;
     }
 
-    //创建token
+    /**
+     * 创建token
+     * @param id
+     * @param subject
+     * @return
+     */
     public static String createJWT(final String id,final String subject){
         //定义生成签名的算法
         SignatureAlgorithm algorithm= SignatureAlgorithm.HS256;
@@ -49,7 +57,12 @@ public class JwtRedisUtil {
         return builder.compact();
     }
 
-    //验证解析token
+    /**
+     * 验证解析token
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
     public static Claims validateJWT(final String accessToken) throws Exception{
         Claims claims=null;
         try {
@@ -63,7 +76,12 @@ public class JwtRedisUtil {
     }
 
 
-    //解析token
+    /**
+     * 解析token
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
     public static Claims parseJWT(final String accessToken) throws Exception{
         SecretKey key=generalKey();
         return Jwts.parser().setSigningKey(key).parseClaimsJws(accessToken).getBody();

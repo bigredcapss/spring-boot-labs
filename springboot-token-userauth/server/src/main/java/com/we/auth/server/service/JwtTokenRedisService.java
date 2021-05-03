@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.TimeUnit;
 
 /**
- * jwt~service
+ * jwt+redis~service
  * @author we
  * @date 2021-05-02 11:20
  **/
@@ -40,7 +40,13 @@ public class JwtTokenRedisService {
     private StringRedisTemplate stringRedisTemplate;
 
 
-    //登录认证、创建token并缓存设置失效token
+    /**
+     * 登录认证、创建token并缓存设置失效token
+     * @param userName
+     * @param password
+     * @return
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public AuthTokenModel authAndCreateToken(String userName, String password) throws Exception{
         User user=userService.authUser(userName,password);
@@ -60,7 +66,11 @@ public class JwtTokenRedisService {
     }
 
 
-    //jwt验证解析token
+    /**
+     * jwt验证解析token
+     * @param accessToken
+     * @return
+     */
     public BaseResponse validateToken(final String accessToken){
         try {
             //验证token的合法性全部交给jwt
@@ -75,7 +85,7 @@ public class JwtTokenRedisService {
                 return new BaseResponse(StatusCode.AccessTokenNotExistRedis);
             }
 
-            //最后是校验一下当前过来的Token是否是之前采用加密算法生成的Token并存于缓存中 ~ 直接演示
+            //最后是校验一下当前过来的Token是否是之前采用加密算法生成的Token并存于缓存中
             ValueOperations<String,String> valueOperations=stringRedisTemplate.opsForValue();
             String redisToken=valueOperations.get(key);
             if (!accessToken.equals(redisToken)){
@@ -91,8 +101,12 @@ public class JwtTokenRedisService {
     }
 
 
-
-    //修改密码
+    /**
+     * 修改密码
+     * @param accessToken
+     * @param dto
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updatePassword(final String accessToken, final UpdatePsdDto dto)throws Exception{
         if (StringUtils.isNotBlank(accessToken)){
@@ -118,7 +132,11 @@ public class JwtTokenRedisService {
         }
     }
 
-    //失效access token
+    /**
+     * 失效access token
+     * @param accessToken
+     * @throws Exception
+     */
     public void invalidateByAccessToken(final String accessToken) throws Exception{
         if (StringUtils.isNotBlank(accessToken)){
             //正确解析access token

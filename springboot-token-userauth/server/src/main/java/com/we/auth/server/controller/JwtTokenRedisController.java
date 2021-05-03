@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * jwt 认证模式
+ * jwt+redis 认证模式
  * @author we
  * @date 2021-05-02 11:38
  **/
@@ -24,7 +24,12 @@ public class JwtTokenRedisController extends AbstractController{
     private JwtTokenRedisService jwtTokenRedisService;
 
 
-    //用户登录
+    /**
+     * 用户登录
+     * @param userName
+     * @param password
+     * @return
+     */
     @RequestMapping(value = "login",method = RequestMethod.POST)
     public BaseResponse login(@RequestParam String userName, @RequestParam String password){
         if (StringUtils.isBlank(userName) || StringUtils.isBlank(password)){
@@ -40,7 +45,10 @@ public class JwtTokenRedisController extends AbstractController{
         return response;
     }
 
-    //访问需要被授权的资源
+    /**
+     * 访问需要被授权的资源
+     * @return
+     */
     @RequestMapping(value = "token/auth",method = RequestMethod.GET)
     public BaseResponse tokenAuth(){
         BaseResponse response=new BaseResponse(StatusCode.Success);
@@ -54,7 +62,10 @@ public class JwtTokenRedisController extends AbstractController{
         return response;
     }
 
-    //访问不需要被授权的资源
+    /**
+     * 访问不需要被授权的资源
+     * @return
+     */
     @RequestMapping(value = "token/unauth",method = RequestMethod.GET)
     public BaseResponse tokenUnauth(){
         BaseResponse response=new BaseResponse(StatusCode.Success);
@@ -68,7 +79,13 @@ public class JwtTokenRedisController extends AbstractController{
         return response;
     }
 
-    //修改密码
+    /**
+     * 修改密码
+     * @param accessToken
+     * @param dto
+     * @param bindingResult
+     * @return
+     */
     @RequestMapping(value = "token/password/update",method = RequestMethod.POST)
     public BaseResponse updatePassword(@RequestHeader String accessToken, @RequestBody @Validated UpdatePsdDto dto, BindingResult bindingResult){
         log.info("--jwt+redis~修改密码--");
@@ -90,7 +107,11 @@ public class JwtTokenRedisController extends AbstractController{
         return response;
     }
 
-    //退出注销登录~前端需要清除token并重新进行登录
+    /**
+     * 退出注销登录~前端需要清除token并重新进行登录
+     * @param accessToken
+     * @return
+     */
     @RequestMapping(value = "token/logout",method = RequestMethod.GET)
     public BaseResponse logout(@RequestHeader String accessToken){
         if (StringUtils.isBlank(accessToken)){

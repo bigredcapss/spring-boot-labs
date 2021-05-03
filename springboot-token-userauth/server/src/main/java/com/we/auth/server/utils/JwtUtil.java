@@ -18,14 +18,23 @@ import java.util.Date;
  **/
 public class JwtUtil {
 
-    //生成密钥
+    /**
+     * 生成密钥
+     * @return
+     */
     public static SecretKey generalKey(){
         byte[] encodedKey= Base64.decode(Constant.JWT_SECRET);
         SecretKey key=new SecretKeySpec(encodedKey,0,encodedKey.length,"AES");
         return key;
     }
 
-    //创建token
+    /**
+     * 创建token
+     * @param id
+     * @param subject
+     * @param expireMills
+     * @return
+     */
     public static String createJWT(final String id,final String subject,final Long expireMills){
         //定义生成签名的算法
         SignatureAlgorithm algorithm= SignatureAlgorithm.HS256;
@@ -56,7 +65,11 @@ public class JwtUtil {
         return builder.compact();
     }
 
-    //验证解析token
+    /**
+     * 验证解析token
+     * @param accessToken
+     * @return
+     */
     public static BaseResponse validateJWT(final String accessToken){
         BaseResponse response=new BaseResponse(StatusCode.Success);
         Claims claims=null;
@@ -74,7 +87,13 @@ public class JwtUtil {
     }
 
 
-    //解析token
+    /**
+     * 解析token
+     * （注：Claims包含在payload中）
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
     public static Claims parseJWT(final String accessToken) throws Exception{
         SecretKey key=generalKey();
         return Jwts.parser().setSigningKey(key).parseClaimsJws(accessToken).getBody();

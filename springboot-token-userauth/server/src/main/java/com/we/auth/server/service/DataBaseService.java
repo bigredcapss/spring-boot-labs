@@ -100,7 +100,7 @@ public class DataBaseService {
                 return new BaseResponse(StatusCode.AccessTokenNotExist);
             }
 
-            // 这里这样写，防止直接修改数据库中auth_token表的access_expire和时间戳
+            //这里这样写，防止直接修改数据库中auth_token表的access_expire和时间戳
             AccessTokenDto dto;
             //为了防止token的伪造，会主动额外做异步操作-解析token
             try {

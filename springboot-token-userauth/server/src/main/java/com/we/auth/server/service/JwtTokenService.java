@@ -32,7 +32,13 @@ public class JwtTokenService {
     private UserMapper userMapper;
 
 
-    //登录认证并创建token
+    /**
+     * 登录认证并创建token
+     * @param userName
+     * @param password
+     * @return
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public AuthTokenModel authAndCreateToken(String userName, String password) throws Exception{
         User user=userService.authUser(userName,password);
@@ -48,14 +54,22 @@ public class JwtTokenService {
     }
 
 
-    //jwt验证解析token
+    /**
+     * jwt验证解析token
+     * @param accessToken
+     * @return
+     */
     public BaseResponse validateToken(final String accessToken){
         return JwtUtil.validateJWT(accessToken);
     }
 
 
-
-    //修改密码
+    /**
+     * 修改密码
+     * @param accessToken
+     * @param dto
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updatePassword(final String accessToken, final UpdatePsdDto dto)throws Exception{
         if (StringUtils.isNotBlank(accessToken)){

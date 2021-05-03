@@ -34,26 +34,25 @@ public class RedisService {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
-
     @Autowired
     private AuthTokenMapper authTokenMapper;
-
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private CommonService commonService;
 
 
-
-    //登录认证并创建token
+    /**
+     * 登录认证并创建token
+     * @param userName
+     * @param password
+     * @return
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public AuthTokenModel authAndCreateToken(String userName, String password) throws Exception{
         User user=userService.authUser(userName,password);
@@ -63,11 +62,12 @@ public class RedisService {
             AccessTokenDto tokenDto=new AccessTokenDto(user.getId(),userName,timestamp,Constant.snowFlake.nextId().toString(),Constant.ACCESS_TOKEN_EXPIRE);
             String jsonStr=objectMapper.writeValueAsString(tokenDto);
             log.info("----json格式的access token字符串：{}",jsonStr);
-
+            //AES加密算法自实现Token
             String accessToken= EncryptUtil.aesEncrypt(jsonStr,Constant.TOKEN_AUTH_KEY);
 
             //缓存存储
             ValueOperations<String,String> valueOperations=stringRedisTemplate.opsForValue();
+            //用了Redis之后，就不需要指定某一个时间字段，过期失效
             valueOperations.set(Constant.TOKEN_REDIS_KEY_PREFIX+userName,accessToken,Constant.ACCESS_TOKEN_EXPIRE, TimeUnit.MILLISECONDS);
 
             log.info("--token+redis用户认证成功，成功生成accessToken--");
@@ -77,7 +77,11 @@ public class RedisService {
         return null;
     }
 
-    //验证-解析token
+    /**
+     * 验证-解析token
+     * @param accessToken
+     * @return
+     */
     public BaseResponse validateToken(final String accessToken){
         BaseResponse response=new BaseResponse(StatusCode.Success);
         try {
@@ -99,7 +103,7 @@ public class RedisService {
                 return new BaseResponse(StatusCode.AccessTokenNotExist);
             }
 
-            //最后是校验一下当前过来的Token是否是之前采用加密算法生成的Token并存于缓存中 ~ 直接演示
+            //最后是校验一下当前过来的Token是否是之前采用加密算法生成的Token并存于缓存中
             ValueOperations<String,String> valueOperations=stringRedisTemplate.opsForValue();
             String redisToken=valueOperations.get(key);
             if (!accessToken.equals(redisToken)){
@@ -112,14 +116,24 @@ public class RedisService {
         return response;
     }
 
-    //解密accessToken
+    /**
+     * 解密accessToken
+     * @param accessToken
+     * @return
+     * @throws Exception
+     */
     public AccessTokenDto parseAccessToken(final String accessToken) throws Exception{
         String jsonStr=EncryptUtil.aesDecrypt(accessToken,Constant.TOKEN_AUTH_KEY);
         return objectMapper.readValue(jsonStr,AccessTokenDto.class);
     }
 
 
-    //修改密码
+    /**
+     * 修改密码
+     * @param accessToken
+     * @param dto
+     * @throws Exception
+     */
     @Transactional(rollbackFor = Exception.class)
     public void updatePassword(final String accessToken, final UpdatePsdDto dto)throws Exception{
         if (StringUtils.isNotBlank(accessToken)){
@@ -145,7 +159,11 @@ public class RedisService {
         }
     }
 
-    //失效access token
+    /**
+     * 失效access token
+     * @param accessToken
+     * @throws Exception
+     */
     public void invalidateByAccessToken(final String accessToken) throws Exception{
         if (StringUtils.isNotBlank(accessToken)){
             //正确解析access token

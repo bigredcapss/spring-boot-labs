@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
+ * Mvc拦截器
  * @author we
  * @date 2021-05-02 11:04
  **/
