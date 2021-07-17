@@ -1,20 +1,19 @@
-package com.we.mapper;
+package com.we.service;
 
 import com.we.entity.Merchant;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
  * @author we
- * @date 2021-07-15 16:40
+ * @date 2021-07-15 16:53
  **/
-public interface MerchantMapper {
-    Merchant getMerchantById(Integer sid);
-
+public interface MerchantService {
     public List<Merchant> getMerchantList(String name, int page, int limit);
 
-    List<Merchant> listMerchant();
+    public List<Merchant> getMerchantList();
+
+    Merchant getMerchantById(Integer id);
 
     public int add(Merchant merchant);
 
@@ -22,7 +21,7 @@ public interface MerchantMapper {
 
     public int updateState(Merchant merchant);
 
-    public int delete(Integer sid);
+    public int delete(Integer id);
 
     int getMerchantCount();
 }
