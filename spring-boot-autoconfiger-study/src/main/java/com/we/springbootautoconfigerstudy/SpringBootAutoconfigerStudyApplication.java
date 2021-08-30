@@ -13,6 +13,7 @@ public class SpringBootAutoconfigerStudyApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(SpringBootAutoconfigerStudyApplication.class, args);
         System.out.println(context.getBean(WeSqlSesssionFactory.class));
+
     }
 
 }
