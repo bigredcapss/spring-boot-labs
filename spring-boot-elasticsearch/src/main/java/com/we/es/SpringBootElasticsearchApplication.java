@@ -1,4 +1,4 @@
-package com.we.es.springbootelasticsearch;
+package com.we.es;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
