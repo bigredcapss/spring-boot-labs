@@ -3,14 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.10.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.we</groupId>
+        <artifactId>spring-boot-labs</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>com.we</groupId>
-    <artifactId>springboot-base</artifactId>
+    <artifactId>spring-boot-base</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-base</name>
     <description>Spring Boot基础应用--文件上传下载，自动装配，启动加载等基础示例</description>
