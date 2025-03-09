@@ -5,10 +5,10 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.we</groupId>
-    <artifactId>springboot-rabbitmq</artifactId>
+    <artifactId>spring-boot-rabbitmq</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>springboot-rabbitmq</name>
+    <name>spring-boot-rabbitmq</name>
 
     <dependencyManagement>
         <dependencies>

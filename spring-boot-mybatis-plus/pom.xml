@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>com.we</groupId>
-    <artifactId>springboot-mybatis-plus</artifactId>
+    <artifactId>spring-boot-mybatis-plus</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-mybatis-plus</name>
+    <name>spring-boot-mybatis-plus</name>
     <description>Spring Boot整合mybatis-plus示例</description>
 
     <properties>

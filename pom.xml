@@ -25,8 +25,15 @@
         <module>spring-boot-base</module>
         <module>spring-boot-dubbo-example</module>
         <module>spring-boot-excel-poi</module>
-
-
+        <module>spring-boot-elasticsearch</module>
+        <module>spring-boot-jwt</module>
+        <module>spring-boot-logback</module>
+        <module>spring-boot-logback-elk</module>
+        <module>spring-boot-mybatis-plus</module>
+        <module>spring-boot-rabbitmq</module>
+        <module>spring-boot-sharding-jdbc</module>
+        <module>spring-boot-token-userauth</module>
+        <module>weredission-spring-boot-starter</module>
     </modules>
 
 
